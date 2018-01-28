@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "types": ["node", "reflect-metadata"],
+    "typeRoots": ["./@types"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "outDir": "./bin",
+    "declaration": true
+  }
+  ,"exclude": [
+    ".vscode",
+    "@types",
+    "node_modules",
+    "bin",
+    "config"
+  ]
+  ,"include": [
+    "src/**/*.ts",
+    "tests/**/*.ts"
+  ]
+}
