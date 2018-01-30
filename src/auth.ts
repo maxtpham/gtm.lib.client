@@ -25,7 +25,7 @@ export module auth {
         let initialUrlValue = await dataGetter('auth.initialUrl.value');
         let initialUrlProcessed = await dataGetter('auth.initialUrl.processed');
     
-        const initialUrl = (typeof(initialUrlGetter) === 'string' || initialUrlGetter instanceof String) ? (<string>initialUrlGetter) :  await initialUrlGetter();
+        const initialUrl = !initialUrlGetter ? (<string>undefined) : (typeof(initialUrlGetter) === 'function') ?  (await initialUrlGetter()) : (<string>initialUrlGetter);
         if (!!initialUrl && initialUrlValue !== initialUrl) {
             await dataSetter('auth.initialUrl.value', initialUrlValue = initialUrl);
             await dataSetter('auth.initialUrl.processed', initialUrlProcessed = '0');

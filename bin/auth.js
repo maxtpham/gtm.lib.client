@@ -26,7 +26,7 @@ var auth;
         return __awaiter(this, void 0, void 0, function* () {
             let initialUrlValue = yield dataGetter('auth.initialUrl.value');
             let initialUrlProcessed = yield dataGetter('auth.initialUrl.processed');
-            const initialUrl = (typeof (initialUrlGetter) === 'string' || initialUrlGetter instanceof String) ? initialUrlGetter : yield initialUrlGetter();
+            const initialUrl = !initialUrlGetter ? undefined : (typeof (initialUrlGetter) === 'function') ? (yield initialUrlGetter()) : initialUrlGetter;
             if (!!initialUrl && initialUrlValue !== initialUrl) {
                 yield dataSetter('auth.initialUrl.value', initialUrlValue = initialUrl);
                 yield dataSetter('auth.initialUrl.processed', initialUrlProcessed = '0');
