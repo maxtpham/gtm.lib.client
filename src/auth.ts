@@ -17,7 +17,7 @@ export module auth {
     
     export async function authenticate(
         userServiceUrl: string,
-        initialUrlGetter: () => Promise<string>,
+        initialUrlGetter: (() => Promise<string>) | string,
         dataGetter: (key: string) => Promise<string>,
         dataSetter: (key: string, value: string) => Promise<void>,
         dataRemover: (key: string) => Promise<void>
@@ -25,7 +25,7 @@ export module auth {
         let initialUrlValue = await dataGetter('auth.initialUrl.value');
         let initialUrlProcessed = await dataGetter('auth.initialUrl.processed');
     
-        const initialUrl = await initialUrlGetter();
+        const initialUrl = (typeof(initialUrlGetter) === 'string' || initialUrlGetter instanceof String) ? (<string>initialUrlGetter) :  await initialUrlGetter();
         if (!!initialUrl && initialUrlValue !== initialUrl) {
             await dataSetter('auth.initialUrl.value', initialUrlValue = initialUrl);
             await dataSetter('auth.initialUrl.processed', initialUrlProcessed = '0');
