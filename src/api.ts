@@ -24,14 +24,14 @@ export abstract class ApiClient {
 
     public execute<T>(
         method: string, path: string, queryParameters: {}, headerParams: {}, formParams: {},
-        isFile: boolean, isResponseFile: boolean, bodyParam?: string, ...authMethods: string[]
+        isFile: boolean, isResponseFile: boolean, bodyParam, ...authMethods: string[]
     ): Promise<ApiResponse<T>> {
         const requestOptions: RequestInit = {
             method: method,
             headers: headerParams
         };
         if (bodyParam) {
-            requestOptions.body = JSON.parse(bodyParam);
+            requestOptions.body = bodyParam;
         }
         if (this.accessToken && requestOptions && requestOptions.headers) {
             requestOptions.headers["Authorization"] = "Bearer " + this.accessToken;

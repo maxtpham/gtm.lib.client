@@ -8,6 +8,6 @@ export declare abstract class ApiClient {
     protected accessToken: string;
     constructor(basePath?: string, accessToken?: string);
     protected readonly defaultHeaders: {};
-    execute<T>(method: string, path: string, queryParameters: {}, headerParams: {}, formParams: {}, isFile: boolean, isResponseFile: boolean, bodyParam?: string, ...authMethods: string[]): Promise<ApiResponse<T>>;
+    execute<T>(method: string, path: string, queryParameters: {}, headerParams: {}, formParams: {}, isFile: boolean, isResponseFile: boolean, bodyParam: any, ...authMethods: string[]): Promise<ApiResponse<T>>;
 }
 export declare function registerApiClient<T extends ApiClient>(iocContainer: interfaces.Container, serviceIdentifier: interfaces.ServiceIdentifier<T>, ctor: new (basePath?: string, accessToken?: string) => T, basePath: string, token?: string | (() => string)): void;

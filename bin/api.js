@@ -19,7 +19,7 @@ class ApiClient {
             headers: headerParams
         };
         if (bodyParam) {
-            requestOptions.body = JSON.parse(bodyParam);
+            requestOptions.body = bodyParam;
         }
         if (this.accessToken && requestOptions && requestOptions.headers) {
             requestOptions.headers["Authorization"] = "Bearer " + this.accessToken;
