@@ -38,7 +38,7 @@ var auth;
                 yield dataSetter('auth.initialUrl.processed', '1');
             }
             const jwt = yield dataGetter('auth.jwt');
-            if (!!jwt && !isLoggedIn(userServiceUrl, jwt)) {
+            if (!!jwt && !(yield isLoggedIn(userServiceUrl, jwt))) {
                 console.log(`[Auth] Current Jwt Token is timed out & will be cleared`);
                 yield dataRemover('auth.jwt');
                 return undefined;
@@ -78,7 +78,7 @@ var auth;
     }
     function isLoggedIn(userServiceUrl, jwt) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield fetch(`${userServiceUrl}/api/v1/system/loggedin`, {
+            const response = yield fetch(`${userServiceUrl}/api/user/v1/system/loggedin`, {
                 headers: {
                     'Authorization': 'Bearer ' + jwt,
                 }

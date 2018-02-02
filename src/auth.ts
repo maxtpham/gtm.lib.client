@@ -38,7 +38,7 @@ export module auth {
         }
     
         const jwt = await dataGetter('auth.jwt');
-        if (!!jwt && !isLoggedIn(userServiceUrl, jwt)) {
+        if (!!jwt && !(await isLoggedIn(userServiceUrl, jwt))) {
             console.log(`[Auth] Current Jwt Token is timed out & will be cleared`)
             await dataRemover('auth.jwt');
             return <any>undefined;
@@ -72,7 +72,7 @@ export module auth {
     }
     
     async function isLoggedIn(userServiceUrl: string, jwt: string): Promise<boolean> {
-        const response = await fetch(`${userServiceUrl}/api/v1/system/loggedin`, {
+        const response = await fetch(`${userServiceUrl}/api/user/v1/system/loggedin`, {
             headers: {
                 'Authorization': 'Bearer ' + jwt,
             }
