@@ -4,7 +4,7 @@
 
 "@tm/lib.common@thanhptr/tm.lib.common":
   version "1.0.0"
-  resolved "https://codeload.github.com/thanhptr/tm.lib.common/tar.gz/ae53d95dd73eb33f5e52ba80f0b3ea4dbcd816d0"
+  resolved "https://codeload.github.com/thanhptr/tm.lib.common/tar.gz/f8b07922bfa6860d4e2c1540a52be58c6ea78c1d"
   dependencies:
     inversify "^4.10.0"
     inversify-binding-decorators "^3.2.0"
@@ -17,10 +17,6 @@
   resolved "https://registry.yarnpkg.com/@types/inversify-binding-decorators/-/inversify-binding-decorators-2.0.0.tgz#6c248f0e5e87f4dafee9d79cc4ae7f757e3eea86"
   dependencies:
     inversify-binding-decorators "*"
-
-"@types/node@^8.5.9":
-  version "8.5.9"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.5.9.tgz#7155cfb4ae405bca4dd8df1a214c339e939109bf"
 
 "@types/reflect-metadata@0.0.5":
   version "0.0.5"
@@ -105,7 +101,7 @@ rimraf@^2.6.2:
   dependencies:
     glob "^7.0.5"
 
-typescript@^2.6.2:
+typescript@^2.7.1:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.7.1.tgz#bb3682c2c791ac90e7c6210b26478a8da085c359"
 

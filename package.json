@@ -6,10 +6,10 @@
   "typings": "bin/index",
   "scripts": {
     "clean": "rimraf bin/*",
-    "build": "npm run clean && npm up && tsc",
-    "b": "npm run build",
-    "prepublishOnly": "npm version patch && npm run build",
-    "p": "npm publish --access public"
+    "build": "yarn run clean && yarn && tsc",
+    "b": "yarn run build",
+    "prepublishOnly": "yarn version patch && yarn run build",
+    "p": "yarn publish --access public"
   },
   "keywords": [],
   "author": "MyBestBook.NET",
@@ -19,9 +19,8 @@
   },
   "devDependencies": {
     "@types/inversify-binding-decorators": "^2.0.0",
-    "@types/node": "^8.5.9",
     "@types/reflect-metadata": "0.0.5",
-    "typescript": "^2.6.2"
+    "typescript": "^2.7.1"
   },
   "dependencies": {
     "@tm/lib.common": "thanhptr/tm.lib.common",
