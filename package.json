@@ -1,5 +1,5 @@
 {
-  "name": "@tm/lib.client",
+  "name": "@gtm/lib.client",
   "version": "1.0.0",
   "description": "Library for all API clients",
   "main": "bin/index.js",
@@ -8,22 +8,23 @@
     "clean": "rimraf bin/*",
     "build": "yarn run clean && yarn && tsc",
     "b": "yarn run build",
-    "prepublishOnly": "yarn version patch && yarn run build",
-    "p": "yarn publish --access public"
+    "prepublishOnly": "npm version patch && yarn run build && git push origin",
+    "p": "npm publish --access public"
   },
   "keywords": [],
   "author": "MyBestBook.NET",
   "license": "UNLICENSED",
   "repository": {
-    "url": "https://github.com/thanhptr/tm.lib.client.git"
+    "url": "https://github.com/thanhptr/gtm.lib.client.git"
   },
   "devDependencies": {
     "@types/inversify-binding-decorators": "^2.0.0",
+    "@types/node": "^9.4.0",
     "@types/reflect-metadata": "0.0.5",
     "typescript": "^2.7.1"
   },
   "dependencies": {
-    "@tm/lib.common": "thanhptr/tm.lib.common",
+    "@gtm/lib.common": "^1.0.9",
     "inversify": "^4.10.0",
     "inversify-binding-decorators": "^3.2.0",
     "reflect-metadata": "^0.1.12",
