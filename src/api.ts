@@ -30,8 +30,9 @@ export abstract class ApiClient {
             method: method,
             headers: headerParams
         };
+        requestOptions.headers["content-type"] = "application/json";
         if (bodyParam) {
-            requestOptions.body = bodyParam;
+            requestOptions.body = JSON.stringify(bodyParam);
         }
         if (this.accessToken && requestOptions && requestOptions.headers) {
             requestOptions.headers["Authorization"] = "Bearer " + this.accessToken;
