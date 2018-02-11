@@ -13,6 +13,11 @@ class ApiClient {
     get defaultHeaders() {
         return {};
     }
+    queryParams(params) {
+        return Object.keys(params)
+            .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+            .join('&');
+    }
     execute(method, path, queryParameters, headerParams, formParams, isFile, isResponseFile, bodyParam, ...authMethods) {
         const requestOptions = {
             method: method,
@@ -21,6 +26,13 @@ class ApiClient {
         requestOptions.headers["content-type"] = "application/json";
         if (bodyParam) {
             requestOptions.body = JSON.stringify(bodyParam);
+        }
+        if (queryParameters) {
+            var esc = encodeURIComponent;
+            var query = Object.keys(queryParameters)
+                .map(k => esc(k) + '=' + esc(queryParameters[k]))
+                .join('&');
+            path += '?' + query;
         }
         if (this.accessToken && requestOptions && requestOptions.headers) {
             requestOptions.headers["Authorization"] = "Bearer " + this.accessToken;

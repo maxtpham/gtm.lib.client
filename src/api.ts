@@ -22,6 +22,12 @@ export abstract class ApiClient {
         return {};
     }
 
+    protected queryParams(params) {
+        return Object.keys(params)
+            .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+            .join('&');
+    }
+
     public execute<T>(
         method: string, path: string, queryParameters: {}, headerParams: {}, formParams: {},
         isFile: boolean, isResponseFile: boolean, bodyParam, ...authMethods: string[]
@@ -34,6 +40,15 @@ export abstract class ApiClient {
         if (bodyParam) {
             requestOptions.body = JSON.stringify(bodyParam);
         }
+
+        if (queryParameters) {
+            var esc = encodeURIComponent;
+            var query = Object.keys(queryParameters)
+                .map(k => esc(k) + '=' + esc(queryParameters[k]))
+                .join('&');
+            path += '?' + query;
+        }
+
         if (this.accessToken && requestOptions && requestOptions.headers) {
             requestOptions.headers["Authorization"] = "Bearer " + this.accessToken;
         }
@@ -84,6 +99,6 @@ class ApiClientFactory<T extends ApiClient> {
     }
 
     get handler(): (context: interfaces.Context) => T {
-        return typeof(this.token) === 'function' ? this.createWithGetter.bind(this) : this.createWithValue.bind(this);
+        return typeof (this.token) === 'function' ? this.createWithGetter.bind(this) : this.createWithValue.bind(this);
     }
 }
