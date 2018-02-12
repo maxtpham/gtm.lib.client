@@ -39,17 +39,22 @@ class ApiClient {
         }
         return new Promise((resolve, reject) => {
             fetch(this._basePath + path, requestOptions)
-                .catch(e => reject(e))
                 .then(response => {
                 if (!!response && response.status >= 200 && response.status < 300) {
-                    response.json()
-                        .catch(e => reject({ response: response, body: e }))
-                        .then(body => resolve({ response: response, body: body }));
+                    if (response.status === 204) {
+                        resolve({ response: response });
+                    }
+                    else {
+                        response.json()
+                            .then(body => resolve({ response: response, body: body }))
+                            .catch(e => reject({ response: response, body: e }));
+                    }
                 }
                 else {
                     reject({ response: response });
                 }
-            });
+            })
+                .catch(e => reject(e));
         });
     }
 }

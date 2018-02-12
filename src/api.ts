@@ -55,16 +55,20 @@ export abstract class ApiClient {
 
         return new Promise<ApiResponse<T>>((resolve, reject) => {
             fetch(this._basePath + path, requestOptions)
-                .catch(e => reject(e))
                 .then(response => {
                     if (!!response && response.status >= 200 && response.status < 300) {
-                        response.json()
-                            .catch(e => reject(<ApiResponse<T>>{ response: response, body: e }))
-                            .then(body => resolve(<ApiResponse<T>>{ response: response, body: body }));
+                        if (response.status === 204) { // no content
+                            resolve(<ApiResponse<T>>{ response: response});
+                        } else {
+                            response.json()
+                                .then(body => resolve(<ApiResponse<T>>{ response: response, body: body }))
+                                .catch(e => reject(<ApiResponse<T>>{ response: response, body: e }));
+                        }
                     } else {
                         reject(<ApiResponse<T>>{ response: response });
                     }
-                });
+                })
+                .catch(e => reject(e));
         });
     }
 }
