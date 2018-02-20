@@ -46,7 +46,9 @@ export abstract class ApiClient {
             var query = Object.keys(queryParameters)
                 .map(k => esc(k) + '=' + esc(queryParameters[k]))
                 .join('&');
-            path += '?' + query;
+            if (query.length > 0) {
+                path += '?' + query;
+            }
         }
 
         if (this.accessToken && requestOptions && requestOptions.headers) {
