@@ -1,5 +1,4 @@
 import { interfaces } from "inversify";
-import "isomorphic-fetch";
 export interface ApiResponse<T> {
     response: Response;
     body?: T;
