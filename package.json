@@ -6,9 +6,9 @@
   "typings": "bin/index",
   "scripts": {
     "clean": "rimraf bin/*",
-    "build": "yarn run clean && yarn && tsc",
-    "b": "yarn run build",
-    "prepublishOnly": "npm version patch && yarn run build && git push origin",
+    "build": "npm run clean && npm install && tsc",
+    "b": "npm run build",
+    "prepublishOnly": "npm version patch && npm run build && git push origin",
     "p": "npm publish --access public"
   },
   "keywords": [],
@@ -18,13 +18,11 @@
     "url": "https://github.com/thanhptr/gtm.lib.client.git"
   },
   "devDependencies": {
-    "@types/inversify-binding-decorators": "^2.0.0",
     "@types/node": "^9.4.6",
-    "@types/reflect-metadata": "0.0.5",
     "typescript": "^2.7.2"
   },
   "dependencies": {
-    "@gtm/lib.common": "^1.0.9",
+    "@gtm/lib.common": "^1.0.10",
     "es6-promise": "^4.2.4",
     "inversify": "^4.10.0",
     "inversify-binding-decorators": "^3.2.0",
