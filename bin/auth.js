@@ -22,6 +22,10 @@ var auth;
         });
     }
     auth.logout = logout;
+    function token(dataGetter) {
+        return dataGetter('auth.jwt');
+    }
+    auth.token = token;
     function authenticate(userServiceUrl, initialUrlGetter, dataGetter, dataSetter, dataRemover) {
         return __awaiter(this, void 0, void 0, function* () {
             let initialUrlValue = yield dataGetter('auth.initialUrl.value');

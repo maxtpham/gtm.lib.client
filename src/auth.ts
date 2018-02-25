@@ -8,11 +8,17 @@ export module auth {
             encodeURIComponent(`${applicationScheme}://login/${provider}?token={TOKEN}`)
         )
     }
-    
+
     export async function logout(
         dataRemover: (key: string) => Promise<void>
     ): Promise<void> {
         await dataRemover('auth.jwt');
+    }
+
+    export function token(
+        dataGetter: (key: string) => Promise<string>
+    ): Promise<string> {
+        return dataGetter('auth.jwt');
     }
     
     export async function authenticate(
