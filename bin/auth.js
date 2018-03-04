@@ -36,16 +36,27 @@ var auth;
                 yield dataSetter('auth.initialUrl.processed', initialUrlProcessed = '0');
                 console.log(`[Auth] Found new InitialUrl: ${initialUrl}`);
             }
-            if (!!initialUrlValue && (!initialUrlProcessed || initialUrlProcessed == '0')) {
-                const jwt = yield handleNewInitialUrl(userServiceUrl, initialUrlValue);
-                yield dataSetter('auth.jwt', jwt);
-                yield dataSetter('auth.initialUrl.processed', '1');
+            let jwt;
+            try {
+                if (!!initialUrlValue && (!initialUrlProcessed || initialUrlProcessed == '0')) {
+                    jwt = yield handleNewInitialUrl(userServiceUrl, initialUrlValue);
+                    yield dataSetter('auth.jwt', jwt);
+                    yield dataSetter('auth.initialUrl.processed', '1');
+                }
+                jwt = yield dataGetter('auth.jwt');
+                if (!!jwt && !(yield isLoggedIn(userServiceUrl, jwt))) {
+                    console.log(`[Auth] Current Jwt Token is timed out & will be cleared`);
+                    yield dataRemover('auth.jwt');
+                    return undefined;
+                }
             }
-            const jwt = yield dataGetter('auth.jwt');
-            if (!!jwt && !(yield isLoggedIn(userServiceUrl, jwt))) {
-                console.log(`[Auth] Current Jwt Token is timed out & will be cleared`);
-                yield dataRemover('auth.jwt');
-                return undefined;
+            catch (e) {
+                console.log(`Error while logging in`, e);
+                if (e && !(e instanceof String)) {
+                    // Logout only
+                    logout(dataRemover);
+                }
+                throw e;
             }
             return jwt;
         });
@@ -59,8 +70,9 @@ var auth;
             }
             else {
                 let token = initialUrlValue.substr(pos + '?token='.length);
-                while (token.length > 0 && token.endsWith('#')) {
-                    token = token.substr(0, token.length - 1);
+                const sharp = token.indexOf('#');
+                if (sharp > 0) {
+                    token = token.substr(0, sharp);
                 }
                 console.log(`[Auth] Exchanging OAuth token: ${token}`);
                 const jwt = yield exchangeToken(userServiceUrl, token);
@@ -73,7 +85,7 @@ var auth;
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield fetch(`${userServiceUrl}/web/auth/jwt?t=${encodeURIComponent(token)}`);
             if (!response.ok) {
-                return Promise.reject(`${response.status} - ${response.statusText}`);
+                return Promise.reject(response.status === 401 ? response : `${response.status} - ${response.statusText}`);
             }
             else {
                 return response.text();
@@ -88,7 +100,7 @@ var auth;
                 }
             });
             if (!response.ok) {
-                return Promise.reject(`${response.status} - ${response.statusText}`);
+                return Promise.reject(response.status === 401 ? response : `${response.status} - ${response.statusText}`);
             }
             else {
                 return response.json();
