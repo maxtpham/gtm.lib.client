@@ -29,13 +29,16 @@ class ApiClient {
         if (bodyParam) {
             requestOptions.body = JSON.stringify(bodyParam);
         }
+        if (method === 'GET') {
+            path += '?t=' + Date.now();
+        }
         if (queryParameters) {
             var esc = encodeURIComponent;
             var query = Object.keys(queryParameters)
                 .map(k => esc(k) + '=' + esc(queryParameters[k]))
                 .join('&');
             if (query.length > 0) {
-                path += '?' + query;
+                path += (method === 'GET' ? '&' : '?') + query;
             }
         }
         if (this.accessToken && requestOptions && requestOptions.headers) {
