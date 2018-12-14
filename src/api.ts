@@ -12,7 +12,7 @@ export type ApiFilter = (path: string, options: RequestInit) => string;
 
 export abstract class ApiClient {
     /** to process the requestOptions then return new path if changed, requestOptions also can be updated */
-    public static Filters: ApiFilter[] = [];
+    public static Filters: ApiFilter[];
     protected _basePath = 'http://localhost';
     protected accessToken: string;
 
@@ -62,10 +62,9 @@ export abstract class ApiClient {
             requestOptions.headers["Authorization"] = "Bearer " + this.accessToken;
         }
 
-        if (ApiClient.Filters.length > 0) {
+        if (ApiClient.Filters) {
             for (let i = 0, l = ApiClient.Filters.length; i < l; i++) {
-                const newPath = ApiClient.Filters[i](path, requestOptions);
-                if (!!newPath) path = newPath;
+                path = ApiClient.Filters[i](path, requestOptions) || path;
             }
         }
 

@@ -41,11 +41,9 @@ class ApiClient {
         if (this.accessToken && requestOptions && requestOptions.headers) {
             requestOptions.headers["Authorization"] = "Bearer " + this.accessToken;
         }
-        if (ApiClient.Filters.length > 0) {
+        if (ApiClient.Filters) {
             for (let i = 0, l = ApiClient.Filters.length; i < l; i++) {
-                const newPath = ApiClient.Filters[i](path, requestOptions);
-                if (!!newPath)
-                    path = newPath;
+                path = ApiClient.Filters[i](path, requestOptions) || path;
             }
         }
         return new Promise((resolve, reject) => {
@@ -69,8 +67,6 @@ class ApiClient {
         });
     }
 }
-/** to process the requestOptions then return new path if changed, requestOptions also can be updated */
-ApiClient.Filters = [];
 exports.ApiClient = ApiClient;
 function registerApiClient(iocContainer, serviceIdentifier, ctor, basePath, token) {
     if (!!iocContainer.bind(serviceIdentifier)) {
