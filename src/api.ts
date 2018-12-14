@@ -8,7 +8,11 @@ export interface ApiResponse<T> {
     body?: T;
 }
 
+export type ApiFilter = (path: string, options: RequestInit) => string;
+
 export abstract class ApiClient {
+    /** to process the requestOptions then return new path if changed, requestOptions also can be updated */
+    public static Filters: ApiFilter[] = [];
     protected _basePath = 'http://localhost';
     protected accessToken: string;
 
@@ -44,22 +48,25 @@ export abstract class ApiClient {
             requestOptions.body = JSON.stringify(bodyParam);
         }
 
-        if (method === 'GET') {
-            path += '?t=' + Date.now();
-        }
-
         if (queryParameters) {
             var esc = encodeURIComponent;
             var query = Object.keys(queryParameters)
                 .map(k => esc(k) + '=' + esc(queryParameters[k]))
                 .join('&');
             if (query.length > 0) {
-                path += (method === 'GET' ? '&' : '?') + query;
+                path += '?' + query;
             }
         }
 
         if (this.accessToken && requestOptions && requestOptions.headers) {
             requestOptions.headers["Authorization"] = "Bearer " + this.accessToken;
+        }
+
+        if (ApiClient.Filters.length > 0) {
+            for (let i = 0, l = ApiClient.Filters.length; i < l; i++) {
+                const newPath = ApiClient.Filters[i](path, requestOptions);
+                if (!!newPath) path = newPath;
+            }
         }
 
         return new Promise<ApiResponse<T>>((resolve, reject) => {

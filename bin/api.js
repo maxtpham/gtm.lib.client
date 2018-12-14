@@ -29,20 +29,24 @@ class ApiClient {
         if (bodyParam) {
             requestOptions.body = JSON.stringify(bodyParam);
         }
-        if (method === 'GET') {
-            path += '?t=' + Date.now();
-        }
         if (queryParameters) {
             var esc = encodeURIComponent;
             var query = Object.keys(queryParameters)
                 .map(k => esc(k) + '=' + esc(queryParameters[k]))
                 .join('&');
             if (query.length > 0) {
-                path += (method === 'GET' ? '&' : '?') + query;
+                path += '?' + query;
             }
         }
         if (this.accessToken && requestOptions && requestOptions.headers) {
             requestOptions.headers["Authorization"] = "Bearer " + this.accessToken;
+        }
+        if (ApiClient.Filters.length > 0) {
+            for (let i = 0, l = ApiClient.Filters.length; i < l; i++) {
+                const newPath = ApiClient.Filters[i](path, requestOptions);
+                if (!!newPath)
+                    path = newPath;
+            }
         }
         return new Promise((resolve, reject) => {
             fetch(this._basePath + path, requestOptions)
@@ -65,6 +69,8 @@ class ApiClient {
         });
     }
 }
+/** to process the requestOptions then return new path if changed, requestOptions also can be updated */
+ApiClient.Filters = [];
 exports.ApiClient = ApiClient;
 function registerApiClient(iocContainer, serviceIdentifier, ctor, basePath, token) {
     if (!!iocContainer.bind(serviceIdentifier)) {

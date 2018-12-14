@@ -3,7 +3,10 @@ export interface ApiResponse<T> {
     response: Response;
     body?: T;
 }
+export declare type ApiFilter = (path: string, options: RequestInit) => string;
 export declare abstract class ApiClient {
+    /** to process the requestOptions then return new path if changed, requestOptions also can be updated */
+    static Filters: ApiFilter[];
     protected _basePath: string;
     protected accessToken: string;
     constructor(basePath?: string, accessToken?: string);
