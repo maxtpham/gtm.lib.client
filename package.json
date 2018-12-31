@@ -8,7 +8,7 @@
     "clean": "rimraf bin/*",
     "build": "npm run clean && npm install && tsc",
     "b": "npm run build",
-    "prepublishOnly": "npm version patch && npm run build && git push origin",
+    "prepublishOnly": "npm version patch && npm run build && git push origin && git push --tags origin",
     "p": "npm publish --access public"
   },
   "keywords": [],
