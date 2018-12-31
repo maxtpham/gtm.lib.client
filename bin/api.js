@@ -50,7 +50,7 @@ class ApiClient {
             fetch(this._basePath + path, requestOptions)
                 .then(response => {
                 if (!!response && response.status >= 200 && response.status < 300) {
-                    if (response.status === 204) {
+                    if (response.status === 204) { // no content
                         resolve({ response: response });
                     }
                     else {
